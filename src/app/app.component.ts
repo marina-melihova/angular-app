@@ -39,9 +39,9 @@ export class AppComponent implements OnInit, OnDestroy {
 
   initCharacterEvents(): void {
     this.charactersResults$ = this.searchTermByCharacters.pipe(
-      map((query: string) => (query ? query.trim() : '')),
-      filter((query: string) => query.length > 2),
       debounceTime(500),
+      map((query: string) => query.trim()),
+      filter((query: string) => query.length > 2),
       distinctUntilChanged(),
       switchMap((query: string) => this.mockDataService.getCharacters(query))
     );
