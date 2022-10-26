@@ -6,10 +6,10 @@ import {
   map,
   Observable,
   Subject,
-  Subscription,
   switchMap,
   debounceTime,
   distinctUntilChanged,
+  takeUntil,
 } from 'rxjs';
 import { MockDataService } from './mock-data.service';
 
@@ -23,7 +23,7 @@ export class AppComponent implements OnInit, OnDestroy {
   charactersResults$: Observable<any>;
   planetAndCharactersResults$: Observable<any>;
   isLoading: boolean = false;
-  subscriptions = new Subscription();
+  private destroyStream = new Subject<void>();
 
   constructor(private mockDataService: MockDataService) {}
 
@@ -55,20 +55,20 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   initLoadingState(): void {
-    this.subscriptions.add(
-      combineLatest([
-        this.mockDataService.getCharactersLoader(),
-        this.mockDataService.getPlanetLoader(),
-      ]).subscribe((loaders) => {
+    combineLatest([
+      this.mockDataService.getCharactersLoader(),
+      this.mockDataService.getPlanetLoader(),
+    ])
+      .pipe(takeUntil(this.destroyStream))
+      .subscribe((loaders) => {
         console.log('loaders', loaders);
         this.isLoading = this.areSomeValueTrue(loaders);
         console.log('isLoading', this.isLoading);
-      })
-    );
+      });
   }
 
   ngOnDestroy(): void {
-    this.subscriptions.unsubscribe();
+    this.destroyStream.next();
   }
 
   areSomeValueTrue(elements: boolean[]): boolean {
