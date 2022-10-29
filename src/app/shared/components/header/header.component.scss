@@ -1,0 +1,22 @@
+@import "variables";
+
+:host {
+  padding: 15px 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: $white;
+  box-shadow: 1px 1px 4px rgba($black, 0.15);
+}
+
+.user-menu {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+}
+
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}

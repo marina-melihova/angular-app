@@ -1,0 +1,15 @@
+<div class="overlay" (click)="handleClick($event)">
+  <div class="modal">
+    <div class="modal-top">
+      <h2>{{ title }}</h2>
+      <app-button [btnIcon]="closeBtnIcon" class="close-btn" (click)="onConfirm(false)" [invert]="true"></app-button>
+    </div>
+    <div class="modal-body">
+      <p class="message">{{ message }}</p>
+      <div class="buttons">
+        <app-button [btnText]="okBtnText" (click)="onConfirm(true)" [width]="btnWidth"></app-button>
+        <app-button [btnText]="cancelBtnText" (click)="onConfirm(false)" [width]="btnWidth"></app-button>
+      </div>
+    </div>
+  </div>
+</div>

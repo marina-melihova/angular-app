@@ -1,0 +1,16 @@
+<div class="card-wrap">
+  <div class="main-panel">
+    <h3 class="title">{{ course.title }}</h3>
+    <p class="desc">{{ course.description }}</p>
+  </div>
+  <div class="info-panel">
+    <div class="course-data">
+      <p class="authors"><span class="subtitle">Authors: </span>{{ course.authors.join(', ')}}</p>
+      <p><span class="subtitle">Duration: </span>{{ convertTime(course.duration) }}</p>
+      <p><span class="subtitle">Created: </span>{{ displayDate(course.creationDate) }}</p>
+    </div>
+    <div class="buttons">
+      <ng-content></ng-content>
+    </div>
+  </div>
+</div>

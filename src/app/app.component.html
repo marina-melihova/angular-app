@@ -1,0 +1,11 @@
+<header>
+  <app-header>
+    <app-user-menu *ngIf="isAuthorized" (signOut)="onSignOut()"></app-user-menu>
+  </app-header>
+</header>
+<main class="container main-wrap">
+  <app-courses *ngIf="isAuthorized; else login"></app-courses>
+  <ng-template #login>
+    <app-login></app-login>
+  </ng-template>
+</main>

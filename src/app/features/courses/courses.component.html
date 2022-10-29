@@ -1,0 +1,16 @@
+<ng-template #info>
+  <app-info [title]="infoTitle" [text]="infoText">
+    <app-button [btnText]="infoBtnText" (click)="onAddCourse()" [width]="btnWidth"></app-button>
+  </app-info>
+</ng-template>
+<ng-template #coursesList>
+
+  <app-course-list [courses]="courses" [isEditable]="isAdmin" (delete)="deleteCourse($event)" (edit)="editCourse($event)" (show)="getCourse($event)">
+  </app-course-list>
+  <app-button [btnText]="'Test Modal'" (click)="onToggle()"></app-button>
+</ng-template>
+<ng-container *ngTemplateOutlet="courses.length ? coursesList : info"></ng-container>
+<ng-template [ngIf]="showModal">
+  <app-modal title="Message" message="Message text" okBtnText="OK" cancelBtnText="Close" (close)="onToggle()" (confirm)="handleChoose($event)">
+  </app-modal>
+</ng-template>

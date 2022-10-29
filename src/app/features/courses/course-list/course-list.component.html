@@ -1,0 +1,11 @@
+<ul class="list-wrap">
+  <li *ngFor="let course of courses" class="card">
+    <app-course-card [course]="course">
+      <app-button [btnText]="showBtnText" (click)="showItem(course)" [width]="btnWidth"></app-button>
+      <ng-template [ngIf]="isEditable">
+        <app-button [btnIcon]="deleteIcon" (click)="deleteItem(course)"></app-button>
+        <app-button [btnIcon]="editIcon" (click)="editItem(course)"></app-button>
+      </ng-template>
+    </app-course-card>
+  </li>
+</ul>
