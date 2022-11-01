@@ -4,9 +4,8 @@
   </app-info>
 </ng-template>
 <ng-template #coursesList>
-
-  <app-course-list [courses]="courses" [isEditable]="isAdmin" (deleteCard)="deleteCourse($event)" (editCard)="editCourse($event)" (showCard)="getCourse($event)">
-  </app-course-list>
+  <app-courses-list [courses]="courses" [isEditable]="isAdmin" (deleteCard)="deleteCourse($event)" (editCard)="editCourse($event)" (showCard)="getCourse($event)">
+  </app-courses-list>
   <app-button [btnText]="'Test Modal'" (click)="onToggle()"></app-button>
 </ng-template>
 <ng-container *ngTemplateOutlet="courses.length ? coursesList : info"></ng-container>

@@ -1,15 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Course } from './../../models/course.model';
-import { mockedCourseList } from './../courses/mocks';
+import { Course } from '../../models/course.model';
+import { mockedCourseList } from '../courses/mocks';
 
 @Component({
   selector: 'app-course',
-  templateUrl: './course.component.html',
-  styleUrls: ['./course.component.scss'],
+  templateUrl: './course-details.component.html',
+  styleUrls: ['./course-details.component.scss'],
 })
-export class CourseComponent implements OnInit {
+export class CourseDetailsComponent implements OnInit {
   course: Course;
 
   constructor(private activatedRoute: ActivatedRoute, private router: Router) {}

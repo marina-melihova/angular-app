@@ -2,11 +2,11 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Course } from 'src/app/models/course.model';
 
 @Component({
-  selector: 'app-course-list',
-  templateUrl: './course-list.component.html',
-  styleUrls: ['./course-list.component.scss'],
+  selector: 'app-courses-list',
+  templateUrl: './courses-list.component.html',
+  styleUrls: ['./courses-list.component.scss'],
 })
-export class CourseListComponent {
+export class CoursesListComponent {
   @Input() courses?: Course[];
   @Input() isEditable: boolean = false;
 

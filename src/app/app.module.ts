@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {
   CoursesModule,
   CourseModule,
@@ -20,7 +19,6 @@ import { AppRoutingModule } from './app-routing.module';
     CourseModule,
     LoginModule,
     RegistrationModule,
-    FontAwesomeModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
