@@ -16,6 +16,7 @@ import {
   ModalComponent,
   UserMenuComponent,
 } from './components';
+import { ConvertTimePipe, DisplayDatePipe } from './pipes';
 
 const COMPONENTS = [
   HeaderComponent,
@@ -25,10 +26,12 @@ const COMPONENTS = [
   UserMenuComponent,
 ];
 
+const PIPES = [ConvertTimePipe, DisplayDatePipe];
+
 @NgModule({
-  declarations: [...COMPONENTS],
+  declarations: [...COMPONENTS, ...PIPES],
   imports: [CommonModule, FontAwesomeModule],
-  exports: [...COMPONENTS],
+  exports: [...COMPONENTS, ...PIPES],
 })
 export class SharedModule {
   constructor(library: FaIconLibrary) {

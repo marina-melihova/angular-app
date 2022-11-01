@@ -6,11 +6,15 @@
   <div class="info-panel">
     <div class="course-data">
       <p class="authors"><span class="subtitle">Authors: </span>{{ course.authors.join(', ')}}</p>
-      <p><span class="subtitle">Duration: </span>{{ convertTime(course.duration) }}</p>
-      <p><span class="subtitle">Created: </span>{{ displayDate(course.creationDate) }}</p>
+      <p><span class="subtitle">Duration: </span>{{ course.duration | convertTime }}</p>
+      <p><span class="subtitle">Created: </span>{{ course.creationDate | displayDate }}</p>
     </div>
     <div class="buttons">
-      <ng-content></ng-content>
+      <app-button [btnText]="showBtnText" (click)="showItem(course)" [width]="btnWidth"></app-button>
+      <ng-template [ngIf]="isEditable">
+        <app-button [btnIcon]="deleteIcon" (click)="deleteItem(course)"></app-button>
+        <app-button [btnIcon]="editIcon" (click)="editItem(course)"></app-button>
+      </ng-template>
     </div>
   </div>
 </div>

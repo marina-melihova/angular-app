@@ -1,4 +1,5 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { IconName } from '@fortawesome/free-solid-svg-icons';
 import { Course } from 'src/app/models/course.model';
 
 @Component({
@@ -8,25 +9,27 @@ import { Course } from 'src/app/models/course.model';
 })
 export class CourseCardComponent {
   title = 'course-card';
+  showBtnText = 'Show course';
+  btnWidth = '180px';
+  editIcon: IconName = 'pencil';
+  deleteIcon: IconName = 'trash-can';
 
   @Input() course: Course;
+  @Input() isEditable: boolean = false;
 
-  numToString(num: number) {
-    return num < 10 ? String('0' + num) : String(num);
+  @Output() delete = new EventEmitter<Course>();
+  @Output() edit = new EventEmitter<Course>();
+  @Output() show = new EventEmitter<Course>();
+
+  showItem(item: Course) {
+    this.show.emit(item);
   }
 
-  convertTime(minutes: number): string {
-    const hours = Math.floor(minutes / 60);
-    const min = minutes % 60;
-    const label = hours > 1 || hours === 0 ? 'hours' : 'hour';
-    return `${this.numToString(hours)}:${this.numToString(min)} ${label}`;
+  deleteItem(item: Course) {
+    this.delete.emit(item);
   }
 
-  displayDate(date: string) {
-    const dateParts = date.split('/') as unknown as number[];
-    const day = this.numToString(dateParts[0]);
-    const month = this.numToString(dateParts[1]);
-    const year = dateParts[2];
-    return `${day}.${month}.${year}`;
+  editItem(item: Course) {
+    this.edit.emit(item);
   }
 }
