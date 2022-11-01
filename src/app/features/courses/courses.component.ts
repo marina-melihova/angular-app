@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { Course } from 'src/app/models/course.model';
 import { mockedCourseList } from './mocks';
 
@@ -19,6 +20,8 @@ export class CoursesComponent {
 
   showModal = false;
 
+  constructor(private router: Router) {}
+
   deleteCourse(course: Course) {
     const newList = this.courses.filter((item) => item.id != course.id);
     this.courses = newList;
@@ -29,7 +32,7 @@ export class CoursesComponent {
   }
 
   getCourse(course: Course) {
-    console.log('Details of course: ', course.title);
+    this.router.navigate(['/courses', course.id]);
   }
 
   onAddCourse() {

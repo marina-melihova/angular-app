@@ -4,8 +4,5 @@
   </app-header>
 </header>
 <main class="container main-wrap">
-  <app-courses *ngIf="isAuthorized; else login"></app-courses>
-  <ng-template #login>
-    <app-login></app-login>
-  </ng-template>
+  <router-outlet></router-outlet>
 </main>

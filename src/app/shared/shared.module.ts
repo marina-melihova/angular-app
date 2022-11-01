@@ -8,6 +8,7 @@ import {
   faPencil,
   faTrashCan,
   faXmark,
+  faArrowLeft,
 } from '@fortawesome/free-solid-svg-icons';
 import {
   HeaderComponent,
@@ -15,6 +16,7 @@ import {
   InfoComponent,
   ModalComponent,
   UserMenuComponent,
+  NotFoundComponent,
 } from './components';
 import { ConvertTimePipe, DisplayDatePipe } from './pipes';
 
@@ -24,17 +26,18 @@ const COMPONENTS = [
   InfoComponent,
   ModalComponent,
   UserMenuComponent,
+  NotFoundComponent,
 ];
 
 const PIPES = [ConvertTimePipe, DisplayDatePipe];
 
 @NgModule({
-  declarations: [...COMPONENTS, ...PIPES],
+  declarations: [...COMPONENTS, ...PIPES, NotFoundComponent],
   imports: [CommonModule, FontAwesomeModule],
   exports: [...COMPONENTS, ...PIPES],
 })
 export class SharedModule {
   constructor(library: FaIconLibrary) {
-    library.addIcons(faPencil, faTrashCan, faXmark);
+    library.addIcons(faPencil, faTrashCan, faXmark, faArrowLeft);
   }
 }

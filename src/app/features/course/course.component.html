@@ -1,1 +1,12 @@
-<p>course works!</p>
+<app-button btnText="Go back to courses" btnIcon="arrow-left" (click)="goBack()"></app-button>
+<div class="card-wrap">
+  <h3 class="title">{{ course.title }}</h3>
+  <div class="card-body">
+    <p class="desc">{{ course.description }}</p>
+    <div class="course-data">
+      <p><span class="label">Authors: </span>{{ course.authors.join(", ") }}</p>
+      <p><span class="label">Duration: </span>{{ course.duration | convertTime }}</p>
+      <p><span class="label">Created: </span>{{ course.creationDate | displayDate }}</p>
+    </div>
+  </div>
+</div>
