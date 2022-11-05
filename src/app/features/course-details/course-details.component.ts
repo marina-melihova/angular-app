@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Course } from '../../models/course.model';
-import { mockedCourseList } from '../courses/mocks';
+import { mockedCourseList } from '../courses-list-container/mocks';
 
 @Component({
   selector: 'app-course',
@@ -15,7 +15,9 @@ export class CourseDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     const courseId = this.activatedRoute.snapshot.paramMap.get('id');
-    const course = mockedCourseList.find((item) => item.id === courseId);
+    const course = mockedCourseList.find(
+      (item: Course) => item.id === courseId
+    );
     if (course) {
       this.course = course;
     } else {

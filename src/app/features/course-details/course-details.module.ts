@@ -7,4 +7,4 @@ import { CourseDetailsComponent } from './course-details.component';
   declarations: [CourseDetailsComponent],
   imports: [CommonModule, SharedModule],
 })
-export class CourseModule {}
+export class CourseDetailsModule {}

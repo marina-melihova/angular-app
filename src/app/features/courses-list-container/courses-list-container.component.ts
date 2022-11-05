@@ -5,10 +5,10 @@ import { mockedCourseList } from './mocks';
 
 @Component({
   selector: 'app-courses',
-  templateUrl: './courses.component.html',
-  styleUrls: ['./courses.component.scss'],
+  templateUrl: './courses-list-container.component.html',
+  styleUrls: ['./courses-list-container.component.scss'],
 })
-export class CoursesComponent {
+export class CoursesListContainerComponent {
   isAdmin = true;
 
   courses: Course[] = mockedCourseList;
