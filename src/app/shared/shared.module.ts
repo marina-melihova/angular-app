@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import {
   FontAwesomeModule,
   FaIconLibrary,
@@ -9,6 +10,8 @@ import {
   faTrashCan,
   faXmark,
   faArrowLeft,
+  faEye,
+  faEyeSlash,
 } from '@fortawesome/free-solid-svg-icons';
 import {
   HeaderComponent,
@@ -17,8 +20,10 @@ import {
   ModalComponent,
   UserMenuComponent,
   NotFoundComponent,
+  SearchBarComponent,
 } from './components';
-import { ConvertTimePipe, DisplayDatePipe } from './pipes';
+import { DurationPipe, CreationDatePipe } from './pipes';
+import { EmailValidatorDirective, ToggleTypeDirective } from './directives';
 
 const COMPONENTS = [
   HeaderComponent,
@@ -27,17 +32,27 @@ const COMPONENTS = [
   ModalComponent,
   UserMenuComponent,
   NotFoundComponent,
+  SearchBarComponent,
 ];
 
-const PIPES = [ConvertTimePipe, DisplayDatePipe];
+const PIPES = [DurationPipe, CreationDatePipe];
+
+const DIRECTIVES = [EmailValidatorDirective, ToggleTypeDirective];
 
 @NgModule({
-  declarations: [...COMPONENTS, ...PIPES, NotFoundComponent],
-  imports: [CommonModule, FontAwesomeModule],
-  exports: [...COMPONENTS, ...PIPES],
+  declarations: [...COMPONENTS, ...PIPES, ...DIRECTIVES],
+  imports: [CommonModule, FontAwesomeModule, FormsModule],
+  exports: [...COMPONENTS, ...PIPES, ...DIRECTIVES, CommonModule],
 })
 export class SharedModule {
   constructor(library: FaIconLibrary) {
-    library.addIcons(faPencil, faTrashCan, faXmark, faArrowLeft);
+    library.addIcons(
+      faPencil,
+      faTrashCan,
+      faXmark,
+      faArrowLeft,
+      faEye,
+      faEyeSlash
+    );
   }
 }

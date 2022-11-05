@@ -22,6 +22,12 @@ export class CoursesListContainerComponent {
 
   constructor(private router: Router) {}
 
+  onSearch(query: string) {
+    this.courses = mockedCourseList.filter((item) =>
+      item.title.toLowerCase().includes(query.trim().toLowerCase())
+    );
+  }
+
   deleteCourse(course: Course) {
     const newList = this.courses.filter((item) => item.id != course.id);
     this.courses = newList;

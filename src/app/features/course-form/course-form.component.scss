@@ -1,0 +1,92 @@
+@import "forms";
+
+.title {
+  margin-bottom: 25px;
+  font-weight: 700;
+  font-size: 32px;
+}
+
+.form {
+  &-container {
+    padding: 50px 70px 60px;
+    display: flex;
+    flex-direction: column;
+    border-radius: 4px;
+    border: 1px solid $light-grey;
+    background-color: $white;
+  }
+
+  &-body {
+    margin-bottom: 70px;
+  }
+
+  &-group {
+    margin-bottom: 10px;
+    padding: 20px 0;
+    display: flex;
+    flex-direction: column;
+    row-gap: 20px;
+    border-bottom: 1px solid $light-grey;
+
+    &-title {
+      font-size: 20px;
+      &:last-of-type {
+        margin-bottom: 20px;
+      }
+    }
+  }
+
+  &-row {
+    display: flex;
+    align-items: center;
+    column-gap: 20px;
+    .form-field {
+      flex-grow: 1;
+    }
+    .cta-btn {
+      align-self: flex-end;
+    }
+  }
+}
+
+label {
+  font-size: 14px;
+}
+
+input.form-control {
+  &:disabled {
+    background: inherit;
+    border: none;
+  }
+  &[id="duration"] {
+    width: 777px;
+  }
+}
+
+.form-container.ng-submitted.reset .form-control.ng-invalid {
+  border-color: $light-grey;
+}
+
+.buttons {
+  display: flex;
+  column-gap: 20px;
+  align-self: flex-end;
+}
+
+.close-btn {
+  color: $text-color;
+}
+
+.list {
+  column-gap: 25px;
+  &-item {
+    display: flex;
+    align-items: center;
+    input {
+      padding: 0;
+      font-family: monospace;
+      font-size: 18px;
+      text-transform: capitalize;
+    }
+  }
+}

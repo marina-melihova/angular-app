@@ -5,6 +5,7 @@ import {
   CourseDetailsModule,
   LoginModule,
   RegistrationModule,
+  CourseFormModule,
 } from './features';
 
 import { AppComponent } from './app.component';

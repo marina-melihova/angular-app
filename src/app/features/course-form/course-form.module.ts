@@ -2,11 +2,11 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../../shared/shared.module';
-import { RegistrationComponent } from './registration.component';
+import { CourseFormComponent } from './course-form.component';
 
 @NgModule({
-  declarations: [RegistrationComponent],
+  declarations: [CourseFormComponent],
   imports: [ReactiveFormsModule, SharedModule, RouterModule],
-  exports: [RegistrationComponent],
+  exports: [CourseFormComponent],
 })
-export class RegistrationModule {}
+export class CourseFormModule {}
