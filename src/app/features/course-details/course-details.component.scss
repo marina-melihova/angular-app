@@ -1,0 +1,48 @@
+@import "variables";
+
+:host {
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  row-gap: 50px;
+}
+
+.card-wrap {
+  padding: 20px;
+  border-radius: 4px;
+  background-color: $white;
+  border: 1px solid rgba($black, 0.12);
+  border-left: 7px solid $text-color;
+  box-shadow: 2px 0px 8px rgba($black, 0.25);
+}
+
+.title {
+  margin-bottom: 50px;
+  text-align: center;
+}
+
+.card-body {
+  display: flex;
+  column-gap: 100px;
+}
+
+.desc {
+  width: 50%;
+  font-size: 18px;
+  line-height: 1.4;
+}
+
+.course-data {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.label {
+  font-weight: bold;
+}
+
+.authors {
+  line-height: 1.7;
+}

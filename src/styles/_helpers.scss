@@ -1,0 +1,8 @@
+@mixin multiLineEllipsis($lineCount: 1) {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: $lineCount;
+  -webkit-box-orient: vertical;
+  white-space: normal;
+}

@@ -1,0 +1,10 @@
+.page-wrap {
+  display: flex;
+  flex-direction: column;
+  row-gap: 50px;
+  align-items: center;
+}
+.status {
+  font-size: 72px;
+  color: darkred;
+}
