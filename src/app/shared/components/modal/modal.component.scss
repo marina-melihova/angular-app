@@ -1,0 +1,49 @@
+@import "variables";
+
+.overlay {
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba($black, 0.7);
+  position: fixed;
+  top: 0;
+  left: 0;
+  box-sizing: border-box;
+  backdrop-filter: blur(4px);
+  z-index: 10;
+}
+
+.modal {
+  width: 500px;
+  max-height: 60vh;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: $white;
+  border: 1px solid $light-grey;
+  border-radius: 4px;
+
+  &-top {
+    padding: 19px 32px 5px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid $grey;
+  }
+  &-body {
+    padding: 24px 24px 40px;
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.message {
+  margin-bottom: 50px;
+}
+
+.buttons {
+  display: flex;
+  column-gap: 12px;
+  align-self: flex-end;
+}

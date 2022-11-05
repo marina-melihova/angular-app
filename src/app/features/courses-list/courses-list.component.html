@@ -1,0 +1,6 @@
+<ul class="list-wrap">
+  <li *ngFor="let course of courses" class="card">
+    <app-course-card [course]="course" [isEditable]="isEditable" (delete)="onDeleteCard($event)" (edit)="onEditCard($event)" (show)="onShowCard($event)">
+    </app-course-card>
+  </li>
+</ul>
