@@ -1,10 +1,4 @@
-import {
-  Component,
-  ViewChild,
-  ElementRef,
-  DoCheck,
-  AfterViewChecked,
-} from '@angular/core';
+import { Component, DoCheck } from '@angular/core';
 import { Router } from '@angular/router';
 import {
   FormBuilder,
@@ -20,14 +14,12 @@ import { IconName } from '@fortawesome/free-solid-svg-icons';
   templateUrl: './course-form.component.html',
   styleUrls: ['./course-form.component.scss'],
 })
-export class CourseFormComponent implements DoCheck, AfterViewChecked {
+export class CourseFormComponent implements DoCheck {
   courseForm: FormGroup;
   closeBtnIcon: IconName = 'xmark';
   isSubmitted: boolean = false;
   formClasses: Record<string, boolean> = { 'form-container': true };
   btnWidth = '185px';
-
-  @ViewChild('authorsList') authorsList: ElementRef;
 
   constructor(private fb: FormBuilder, private router: Router) {
     this.buildForm();
@@ -35,15 +27,6 @@ export class CourseFormComponent implements DoCheck, AfterViewChecked {
 
   ngDoCheck() {
     this.formClasses['reset'] = !this.isSubmitted;
-  }
-
-  ngAfterViewChecked() {
-    const inputs = this.authorsList.nativeElement.getElementsByTagName('input');
-    if (inputs.length) {
-      const lastIndex = inputs.length - 1;
-      const countSymbols = this.authors.controls[lastIndex].value.length;
-      inputs[lastIndex].style.width = countSymbols + 'ch';
-    }
   }
 
   buildForm(): void {

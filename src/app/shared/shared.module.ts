@@ -23,7 +23,11 @@ import {
   SearchBarComponent,
 } from './components';
 import { DurationPipe, CreationDatePipe } from './pipes';
-import { EmailValidatorDirective, ToggleTypeDirective } from './directives';
+import {
+  EmailValidatorDirective,
+  ToggleTypeDirective,
+  ResizeInputDirective,
+} from './directives';
 
 const COMPONENTS = [
   HeaderComponent,
@@ -37,7 +41,11 @@ const COMPONENTS = [
 
 const PIPES = [DurationPipe, CreationDatePipe];
 
-const DIRECTIVES = [EmailValidatorDirective, ToggleTypeDirective];
+const DIRECTIVES = [
+  EmailValidatorDirective,
+  ToggleTypeDirective,
+  ResizeInputDirective,
+];
 
 @NgModule({
   declarations: [...COMPONENTS, ...PIPES, ...DIRECTIVES],

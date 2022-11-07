@@ -78,6 +78,7 @@ input.form-control {
 }
 
 .list {
+  flex-wrap: wrap;
   column-gap: 25px;
   &-item {
     display: flex;

@@ -37,9 +37,9 @@
 
       <div class="form-field">
         <label>Authors list</label>
-        <div formArrayName="authors" class="form-row list" #authorsList>
+        <div formArrayName="authors" class="form-row list">
           <div *ngFor="let author of authors.controls; let i = index" class="list-item">
-            <input [formControlName]="i" [value]="author?.value" [attr.disabled]="true" class="form-control" placeholder="Input text" size="3">
+            <input [formControlName]="i" [attr.value]="author?.value" [attr.disabled]="true" class="form-control" placeholder="Input text" size="3" appResizeInput>
             <app-button [btnIcon]="closeBtnIcon" class="close-btn" (click)="onRemoveAuthor(i)" [invert]="true"></app-button>
           </div>
         </div>
