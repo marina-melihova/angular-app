@@ -1,4 +1,3 @@
-import { CourseFormComponent } from './features/course-form/course-form.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { NotFoundComponent } from './shared/components';
@@ -6,7 +5,6 @@ import { LoginComponent } from './features/login/login.component';
 import { RegistrationComponent } from './features/registration/registration.component';
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
   {
     path: 'courses',
     loadChildren: () =>
@@ -22,10 +20,7 @@ export const routes: Routes = [
     path: 'registration',
     component: RegistrationComponent,
   },
-  {
-    path: 'form',
-    component: CourseFormComponent,
-  },
+  { path: '', redirectTo: 'courses', pathMatch: 'full' },
   { path: '**', title: '404', component: NotFoundComponent },
 ];
 
