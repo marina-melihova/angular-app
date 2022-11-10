@@ -1,0 +1,37 @@
+@import "variables";
+
+.form-control {
+  display: block;
+  width: 100%;
+  padding: 12px 16px;
+  color: $text-color;
+  font-family: "Open Sans";
+  font-size: 16px;
+  line-height: 1.5;
+  background-color: #fff;
+  background-clip: padding-box;
+  appearance: none;
+  border-radius: 4px;
+  border: 1px solid $light-grey;
+  transition: border-color 0.15s ease-in-out;
+  &::placeholder {
+    color: $light-grey;
+    font-family: "Open Sans";
+    font-size: 16px;
+  }
+  &.ng-invalid {
+    &.ng-touched,
+    .form-container.ng-submitted & {
+      border-color: $error-color;
+    }
+  }
+}
+
+.form-error {
+  color: $error-color;
+}
+
+label {
+  color: $text-color;
+  font-weight: 700;
+}

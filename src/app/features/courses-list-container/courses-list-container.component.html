@@ -4,6 +4,7 @@
   </app-info>
 </ng-template>
 <ng-template #coursesList>
+  <app-search-bar (search)="onSearch($event)" [placeholder]="'Input text'"></app-search-bar>
   <app-courses-list [courses]="courses" [isEditable]="isAdmin" (deleteCard)="deleteCourse($event)" (editCard)="editCourse($event)" (showCard)="getCourse($event)">
   </app-courses-list>
   <app-button [btnText]="'Test Modal'" (click)="onToggle()"></app-button>

@@ -1,19 +1,26 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { NotFoundComponent } from './shared/components';
-import { CoursesComponent } from './features/courses/courses.component';
-import { CourseDetailsComponent } from './features/course-details/course-details.component';
+import { LoginComponent } from './features/login/login.component';
+import { RegistrationComponent } from './features/registration/registration.component';
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'courses', pathMatch: 'full' },
   {
     path: 'courses',
-    component: CoursesComponent,
+    loadChildren: () =>
+      import(
+        './features/courses-list-container/courses-list-container.module'
+      ).then((mod) => mod.CoursesListContainerModule),
   },
   {
-    path: 'courses/:id',
-    component: CourseDetailsComponent,
+    path: 'login',
+    component: LoginComponent,
   },
+  {
+    path: 'registration',
+    component: RegistrationComponent,
+  },
+  { path: '', redirectTo: 'courses', pathMatch: 'full' },
   { path: '**', title: '404', component: NotFoundComponent },
 ];
 

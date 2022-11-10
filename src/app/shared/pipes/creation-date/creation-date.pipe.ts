@@ -2,9 +2,9 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { numToString } from '..';
 
 @Pipe({
-  name: 'displayDate',
+  name: 'creationDate',
 })
-export class DisplayDatePipe implements PipeTransform {
+export class CreationDatePipe implements PipeTransform {
   transform(value: string): string {
     const dateParts = value.split('/') as unknown as number[];
     const day = numToString(dateParts[0]);

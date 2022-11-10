@@ -5,8 +5,8 @@
     <p class="desc">{{ course.description }}</p>
     <div class="course-data">
       <p><span class="label">Authors: </span>{{ course.authors.join(", ") }}</p>
-      <p><span class="label">Duration: </span>{{ course.duration | convertTime }}</p>
-      <p><span class="label">Created: </span>{{ course.creationDate | displayDate }}</p>
+      <p><span class="label">Duration: </span>{{ course.duration | duration }}</p>
+      <p><span class="label">Created: </span>{{ course.creationDate | creationDate }}</p>
     </div>
   </div>
 </div>
