@@ -1,0 +1,69 @@
+<h2 class="title">Course edit/create page</h2>
+<form [formGroup]="courseForm" (ngSubmit)="onSubmit()" [ngClass]="formClasses">
+  <div class="form-body">
+    <h3 class="form-group-title">Main Info</h3>
+    <div class="form-group">
+      <div class="form-field">
+        <label for="title">Title</label>
+        <input type="text" name="title" id="title" class="form-control" formControlName="title" placeholder="Input text" />
+        <div *ngIf="title?.invalid && (title?.touched || isSubmitted)" class="form-error">
+          <span *ngIf="title?.errors?.['required']">Title is required</span>
+        </div>
+      </div>
+
+      <div class="form-field">
+        <label for="description">Description</label>
+        <textarea name="description" id="description" rows="7" class="form-control" formControlName="description" placeholder="Input text"></textarea>
+        <div *ngIf="description?.invalid && (description?.touched || isSubmitted)" class="form-error">
+          <span *ngIf="description?.errors?.['required']">Description is required</span>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="form-group-title">Authors</h3>
+    <div class="form-group">
+      <div class="form-row">
+        <div formGroupName="newAuthor" class="form-field">
+          <label for="authorName">Author name</label>
+          <input type="text" name="authorName" id="authorName" class="form-control" formControlName="authorName" #newAuthor placeholder="Input text">
+          <div *ngIf="authorName?.invalid && authorName?.value" class="form-error">
+            <span *ngIf="authorName?.errors?.['pattern']">Name should contain latin letters and numbers only</span>
+          </div>
+        </div>
+
+        <app-button btnText="Create author" class="cta-btn" type="button" (click)="onAddAuthor(newAuthor.value)" [width]="btnWidth">
+        </app-button>
+      </div>
+
+      <div class="form-field">
+        <label>Authors list</label>
+        <div formArrayName="authors" class="form-row list">
+          <div *ngFor="let author of authors.controls; let i = index" class="list-item">
+            <input [formControlName]="i" [attr.value]="author?.value" [attr.disabled]="true" class="form-control" placeholder="Input text" size="3" appResizeInput>
+            <app-button [btnIcon]="closeBtnIcon" class="close-btn" (click)="onRemoveAuthor(i)" [invert]="true"></app-button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="form-group-title">Duration</h3>
+    <div class="form-field">
+      <label for="duration">Duration</label>
+      <div class="form-row">
+        <input type="number" name="duration" id="duration" class="form-control" formControlName="duration" placeholder="Input text" />
+        <p [innerHTML]="duration?.value | duration : 'html'"></p>
+      </div>
+      <div *ngIf="duration?.invalid && (duration?.touched || isSubmitted)" class="form-error">
+        <span *ngIf="duration?.errors?.['required']; else validator">Duration is required</span>
+        <ng-template #validator>
+          <span *ngIf="duration?.errors?.['min']">Duration shouldn't be less than 0</span>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+
+  <div class="buttons">
+    <app-button btnText="Cancel" (click)="goBack()" [width]="btnWidth"></app-button>
+    <app-button btnText="Create course" type="submit" [width]="btnWidth"></app-button>
+  </div>
+</form>

@@ -1,8 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import {
-  CoursesModule,
-  CourseModule,
+  CoursesListContainerModule,
   LoginModule,
   RegistrationModule,
 } from './features';
@@ -15,8 +14,7 @@ import { AppRoutingModule } from './app-routing.module';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    CoursesModule,
-    CourseModule,
+    CoursesListContainerModule,
     LoginModule,
     RegistrationModule,
   ],

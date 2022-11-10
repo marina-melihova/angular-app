@@ -5,10 +5,10 @@ import { mockedCourseList } from './mocks';
 
 @Component({
   selector: 'app-courses',
-  templateUrl: './courses.component.html',
-  styleUrls: ['./courses.component.scss'],
+  templateUrl: './courses-list-container.component.html',
+  styleUrls: ['./courses-list-container.component.scss'],
 })
-export class CoursesComponent {
+export class CoursesListContainerComponent {
   isAdmin = true;
 
   courses: Course[] = mockedCourseList;
@@ -21,6 +21,12 @@ export class CoursesComponent {
   showModal = false;
 
   constructor(private router: Router) {}
+
+  onSearch(query: string) {
+    this.courses = mockedCourseList.filter((item) =>
+      item.title.toLowerCase().includes(query.trim().toLowerCase())
+    );
+  }
 
   deleteCourse(course: Course) {
     const newList = this.courses.filter((item) => item.id != course.id);
