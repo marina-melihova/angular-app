@@ -1,18 +1,6 @@
 import { Directive } from '@angular/core';
 import { FormControl, Validator, NG_VALIDATORS } from '@angular/forms';
-
-export function validateEmail() {
-  return (control: FormControl) => {
-    const EMAIL_REGEXP = /^\S+@\S+\.\S+$/i;
-    return EMAIL_REGEXP.test(control.value)
-      ? null
-      : {
-          validateEmail: {
-            valid: false,
-          },
-        };
-  };
-}
+import { validateEmail } from '../../utils';
 
 @Directive({
   selector: '[validateEmail][ngModel]',

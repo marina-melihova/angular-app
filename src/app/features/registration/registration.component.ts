@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { validateEmail } from '../../shared/directives/email-validator/email-validator.directive';
+import { validateEmail } from '../../shared/utils';
 
 @Component({
   selector: 'app-registration',
