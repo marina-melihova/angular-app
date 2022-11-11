@@ -1,7 +1,11 @@
-@import "variables";
+@import 'variables';
 
 :host {
-  padding: 30px;
+  position: relative;
+}
+
+.page-wrap {
+  padding: 100px 190px;
   display: flex;
   flex-direction: column;
   row-gap: 50px;

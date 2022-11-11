@@ -6,3 +6,13 @@ export interface Course {
   duration: number;
   authors: string[];
 }
+
+export interface CourseResponse {
+  successful: boolean;
+  result: Course;
+}
+
+export interface CoursesResponse {
+  successful: boolean;
+  result: Course[];
+}

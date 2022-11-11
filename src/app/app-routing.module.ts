@@ -1,24 +1,24 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { NotFoundComponent } from './shared/components';
-import { LoginComponent } from './features/login/login.component';
-import { RegistrationComponent } from './features/registration/registration.component';
+import { AuthorizedGuard, NotAuthorizedGuard } from './auth';
 
 export const routes: Routes = [
   {
     path: 'courses',
     loadChildren: () =>
-      import(
-        './features/courses-list-container/courses-list-container.module'
-      ).then((mod) => mod.CoursesListContainerModule),
+      import('./features/courses-container/courses-container.module').then((mod) => mod.CoursesContainerModule),
+    canLoad: [AuthorizedGuard],
   },
   {
     path: 'login',
-    component: LoginComponent,
+    loadChildren: () => import('./features/login/login.module').then((mod) => mod.LoginModule),
+    canActivate: [NotAuthorizedGuard],
   },
   {
     path: 'registration',
-    component: RegistrationComponent,
+    loadChildren: () => import('./features/registration/registration.module').then((mod) => mod.RegistrationModule),
+    canActivate: [NotAuthorizedGuard],
   },
   { path: '', redirectTo: 'courses', pathMatch: 'full' },
   { path: '**', title: '404', component: NotFoundComponent },

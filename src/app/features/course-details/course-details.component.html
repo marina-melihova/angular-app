@@ -1,12 +1,17 @@
-<app-button btnText="Go back to courses" btnIcon="arrow-left" (click)="goBack()"></app-button>
-<div class="card-wrap">
-  <h3 class="title">{{ course.title }}</h3>
-  <div class="card-body">
-    <p class="desc">{{ course.description }}</p>
-    <div class="course-data">
-      <p><span class="label">Authors: </span>{{ course.authors.join(", ") }}</p>
-      <p><span class="label">Duration: </span>{{ course.duration | duration }}</p>
-      <p><span class="label">Created: </span>{{ course.creationDate | creationDate }}</p>
+<div class="page-wrap container"
+     *ngIf="course$ | async as course">
+  <app-button btnText="Go back to courses"
+              btnIcon="arrow-left"
+              (click)="goBack()"></app-button>
+  <div class="card-wrap">
+    <h3 class="title">{{ course.title }}</h3>
+    <div class="card-body">
+      <p class="desc">{{ course.description }}</p>
+      <div class="course-data">
+        <p><span class="label">Authors: </span>{{ authorsNames.join(", ") }}</p>
+        <p><span class="label">Duration: </span>{{ course.duration | duration }}</p>
+        <p><span class="label">Created: </span>{{ course.creationDate | creationDate }}</p>
+      </div>
     </div>
   </div>
 </div>

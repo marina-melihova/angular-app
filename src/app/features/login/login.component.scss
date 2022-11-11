@@ -1,4 +1,12 @@
-@import "forms";
+@import 'forms';
+
+:host {
+  position: relative;
+}
+
+.main-wrap {
+  padding: 70px 158px;
+}
 
 .title {
   margin-bottom: 35px;
@@ -14,7 +22,7 @@
   }
 
   &-container {
-    padding: 75px 135px 50px;
+    padding: 45px 135px 50px;
     width: 100%;
     border: 1px solid $light-grey;
     border-radius: 4px;
@@ -26,6 +34,12 @@
     &:last-of-type {
       margin-bottom: 54px;
     }
+  }
+
+  &-error {
+    margin-bottom: 25px;
+    color: $error-color;
+    text-align: center;
   }
 }
 

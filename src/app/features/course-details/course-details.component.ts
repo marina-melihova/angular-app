@@ -1,31 +1,62 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Course } from '../../models/course.model';
-import { mockedCourseList } from '../courses-list-container/mocks';
+import { Observable, Subject, takeUntil, BehaviorSubject, filter } from 'rxjs';
+import { CoursesStoreService, AuthorsStoreService } from 'src/app/services';
+import { Course, Author, CourseResponse } from 'src/app/models';
 
 @Component({
   selector: 'app-course',
   templateUrl: './course-details.component.html',
   styleUrls: ['./course-details.component.scss'],
 })
-export class CourseDetailsComponent implements OnInit {
-  course: Course;
+export class CourseDetailsComponent implements OnInit, OnDestroy {
+  private course$$: BehaviorSubject<Course | null> = new BehaviorSubject<Course | null>(null);
+  course$: Observable<Course | null> = this.course$$.asObservable();
+  courseId: string;
+  authorsNames: string[] = [];
 
-  constructor(private activatedRoute: ActivatedRoute, private router: Router) {}
+  private destroyStream = new Subject<void>();
+  private authors$: BehaviorSubject<Author[]> = new BehaviorSubject<Author[]>([]);
+  private isLoading$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
-  ngOnInit(): void {
-    const courseId = this.activatedRoute.snapshot.paramMap.get('id');
-    const course = mockedCourseList.find(
-      (item: Course) => item.id === courseId
-    );
-    if (course) {
-      this.course = course;
-    } else {
-      this.router.navigateByUrl('404', { skipLocationChange: true });
-    }
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private authorsStoreService: AuthorsStoreService,
+    private coursesStoreService: CoursesStoreService
+  ) {
+    this.authorsStoreService.authors$.subscribe(this.authors$);
+    this.authorsStoreService.isLoading$.subscribe(this.isLoading$);
+  }
+
+  ngOnInit() {
+    this.courseId = this.route.snapshot.paramMap.get('id') || '';
+    this.initCourseData();
+  }
+
+  initCourseData() {
+    this.coursesStoreService
+      .getCourse(this.courseId)
+      .pipe(takeUntil(this.destroyStream))
+      .subscribe({
+        next: (response: CourseResponse) => {
+          const course = response.result;
+          this.course$$.next(course);
+          const courseAuthorsIds = course.authors;
+          this.isLoading$.pipe(filter((isLoading) => !isLoading)).subscribe(() => {
+            const allAuthors = this.authors$.getValue();
+            this.authorsNames = courseAuthorsIds.map((authorId) => allAuthors.find(({ id }) => id === authorId)!.name);
+          });
+        },
+        error: () => this.router.navigateByUrl('404', { skipLocationChange: true }),
+      });
   }
 
   goBack() {
     this.router.navigate(['courses']);
+  }
+
+  ngOnDestroy() {
+    this.destroyStream.next();
   }
 }

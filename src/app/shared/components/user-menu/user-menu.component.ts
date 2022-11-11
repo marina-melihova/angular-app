@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'app-user-menu',
@@ -6,9 +6,10 @@ import { Component, EventEmitter, Output } from '@angular/core';
   styleUrls: ['./user-menu.component.scss'],
 })
 export class UserMenuComponent {
-  userName: string = 'Harry Potter';
   btnText: string = 'Logout';
   btnWidth: string = '140px';
+
+  @Input() name: string | null;
 
   @Output() signOut = new EventEmitter();
 

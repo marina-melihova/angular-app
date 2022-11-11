@@ -5,15 +5,19 @@
   </div>
   <div class="info-panel">
     <div class="course-data">
-      <p class="authors"><span class="subtitle">Authors: </span>{{ course.authors.join(', ')}}</p>
+      <p class="authors"><span class="subtitle">Authors: </span>{{ authorsNames.join(', ')}}</p>
       <p><span class="subtitle">Duration: </span>{{ course.duration | duration }}</p>
       <p><span class="subtitle">Created: </span>{{ course.creationDate | creationDate }}</p>
     </div>
     <div class="buttons">
-      <app-button [btnText]="showBtnText" (click)="showItem(course)" [width]="btnWidth"></app-button>
+      <app-button [btnText]="showBtnText"
+                  (click)="showItem(course.id)"
+                  [width]="btnWidth"></app-button>
       <ng-template [ngIf]="isEditable">
-        <app-button [btnIcon]="deleteIcon" (click)="deleteItem(course)"></app-button>
-        <app-button [btnIcon]="editIcon" (click)="editItem(course)"></app-button>
+        <app-button [btnIcon]="deleteIcon"
+                    (click)="deleteItem(course.id)"></app-button>
+        <app-button [btnIcon]="editIcon"
+                    (click)="editItem(course.id)"></app-button>
       </ng-template>
     </div>
   </div>
