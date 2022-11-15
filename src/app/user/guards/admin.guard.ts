@@ -1,17 +1,17 @@
 import { Injectable } from '@angular/core';
 import { Router, ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot, UrlTree } from '@angular/router';
-import { Observable, map, skipWhile } from 'rxjs';
+import { Observable, BehaviorSubject, map, filter } from 'rxjs';
 import { UserModule, UserStoreService } from '..';
 
 @Injectable({
   providedIn: UserModule,
 })
 export class AdminGuard implements CanActivate {
-  isAdmin: boolean;
+  private isAdmin$$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+
   constructor(private userStoreService: UserStoreService, private router: Router) {
-    this.userStoreService.isAdmin$.subscribe((isAdmin) => {
-      this.isAdmin = isAdmin;
-    });
+    this.userStoreService.getUser();
+    this.userStoreService.isAdmin$.subscribe(this.isAdmin$$);
   }
 
   canActivate(
@@ -19,9 +19,10 @@ export class AdminGuard implements CanActivate {
     state: RouterStateSnapshot
   ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     return this.userStoreService.isLoading$.pipe(
-      skipWhile((isLoading) => isLoading),
+      filter((isLoading) => !isLoading),
       map(() => {
-        if (this.isAdmin) {
+        const isAdmin = this.isAdmin$$.getValue();
+        if (isAdmin) {
           return true;
         } else {
           return this.router.createUrlTree(['courses']);

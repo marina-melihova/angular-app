@@ -77,14 +77,12 @@ export class CourseFormComponent implements DoCheck, OnDestroy {
     this.coursesStoreService
       .getCourse(this.courseId)
       .pipe(takeUntil(this.destroyStream))
-      .subscribe((response: CourseResponse) => {
-        const course = response.result;
-        if (course) {
-          this.course = course;
+      .subscribe({
+        next: (response: CourseResponse) => {
+          this.course = response.result;
           this.buildForm();
-        } else {
-          this.router.navigateByUrl('404', { skipLocationChange: true });
-        }
+        },
+        error: () => this.router.navigateByUrl('404', { skipLocationChange: true }),
       });
   }
 
