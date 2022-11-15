@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, finalize, tap } from 'rxjs';
 import { CoursesService } from '.';
-import { Course, CoursesResponse, CourseResponse } from '../models';
+import { Course, CoursesResponse, CourseResponse, CommonResponse } from '../models';
 
 @Injectable({
   providedIn: 'root',
@@ -53,7 +53,7 @@ export class CoursesStoreService {
       });
   }
 
-  deleteCourse(id: string) {
+  deleteCourse(id: string): Observable<CommonResponse> {
     this.isLoading$$.next(true);
     return this.coursesService
       .deleteCourse(id)

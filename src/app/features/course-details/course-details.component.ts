@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable, Subject, takeUntil, BehaviorSubject, filter } from 'rxjs';
+import { Subject, takeUntil, BehaviorSubject, filter } from 'rxjs';
 import { CoursesStoreService, AuthorsStoreService } from 'src/app/services';
 import { Course, Author, CourseResponse } from 'src/app/models';
 
@@ -10,8 +10,7 @@ import { Course, Author, CourseResponse } from 'src/app/models';
   styleUrls: ['./course-details.component.scss'],
 })
 export class CourseDetailsComponent implements OnInit, OnDestroy {
-  private course$$: BehaviorSubject<Course | null> = new BehaviorSubject<Course | null>(null);
-  course$: Observable<Course | null> = this.course$$.asObservable();
+  course: Course | null = null;
   courseId: string;
   authorsNames: string[] = [];
 
@@ -40,9 +39,8 @@ export class CourseDetailsComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroyStream))
       .subscribe({
         next: (response: CourseResponse) => {
-          const course = response.result;
-          this.course$$.next(course);
-          const courseAuthorsIds = course.authors;
+          this.course = response.result;
+          const courseAuthorsIds = this.course.authors;
           this.isLoading$.pipe(filter((isLoading) => !isLoading)).subscribe(() => {
             const allAuthors = this.authors$.getValue();
             this.authorsNames = courseAuthorsIds.map((authorId) => allAuthors.find(({ id }) => id === authorId)!.name);

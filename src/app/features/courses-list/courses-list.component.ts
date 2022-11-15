@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { BehaviorSubject } from 'rxjs';
 import { CoursesStoreService } from 'src/app/services';
 import { UserStoreService } from 'src/app/user';
 import { Course } from 'src/app/models';
@@ -18,14 +17,14 @@ export class CoursesListComponent {
   infoText = 'Please, use the "Add new course" button';
   addBtnText = 'Add new course';
   btnWidth = '235px';
-  private courses$$: BehaviorSubject<Course[]> = new BehaviorSubject<Course[]>([]);
+  courses: Course[] = [];
 
   constructor(
     public coursesStoreService: CoursesStoreService,
     public userStoreService: UserStoreService,
     private router: Router
   ) {
-    coursesStoreService.courses$.subscribe(this.courses$$);
+    coursesStoreService.courses$.subscribe((items) => (this.courses = items));
   }
 
   onAddCourse() {
@@ -52,8 +51,7 @@ export class CoursesListComponent {
   onConfirmDeleteModal(isOk: boolean) {
     if (isOk) {
       this.coursesStoreService.deleteCourse(this.courseDelId).subscribe(() => {
-        const coursesList = this.courses$$.getValue();
-        if (!coursesList.length) {
+        if (!this.courses.length) {
           this.coursesStoreService.getAll();
         }
       });

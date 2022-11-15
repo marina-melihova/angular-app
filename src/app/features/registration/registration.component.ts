@@ -13,12 +13,12 @@ import { validateEmail } from '../../shared/utils';
 export class RegistrationComponent implements OnInit, OnDestroy {
   regForm: FormGroup;
   isLoading: boolean = false;
+  error: string;
   private destroyStream = new Subject<void>();
 
   constructor(public authService: AuthService, private router: Router) {}
 
   ngOnInit() {
-    this.authService.error$.next('');
     this.buildForm();
     this.initLoadingState();
   }
@@ -48,13 +48,17 @@ export class RegistrationComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
+    this.error = '';
     if (this.regForm.invalid) {
       return;
     }
     this.authService
       .register(this.regForm.value)
       .pipe(takeUntil(this.destroyStream))
-      .subscribe(() => this.router.navigate(['/login']));
+      .subscribe({
+        next: () => this.router.navigate(['/login']),
+        error: (err: string) => (this.error = err),
+      });
   }
 
   ngOnDestroy() {

@@ -1,5 +1,6 @@
 import { Component, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
+import { HttpResponse } from '@angular/common/http';
 import { Subject, BehaviorSubject, takeUntil, combineLatest } from 'rxjs';
 import { AuthService } from 'src/app/auth';
 import { UserStoreService } from 'src/app/user';
@@ -41,8 +42,14 @@ export class CoursesContainerComponent implements OnDestroy {
   }
 
   logout() {
-    this.authService.logout();
-    this.router.navigate(['/login']);
+    this.authService
+      .logout()
+      .pipe(takeUntil(this.destroyStream))
+      .subscribe((response: HttpResponse<any>) => {
+        if (response.status === 200) {
+          this.router.navigate(['/login']);
+        }
+      });
   }
 
   initLoadingState() {

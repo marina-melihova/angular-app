@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, catchError, finalize } from 'rxjs';
+import { HttpClient, HttpResponse } from '@angular/common/http';
+import { BehaviorSubject, Observable, finalize, tap } from 'rxjs';
 import { SessionStorageService } from '..';
-import { User } from 'src/app/models';
+import { User, LoginResponse, CommonResponse } from 'src/app/models';
 
 @Injectable({
   providedIn: 'root',
@@ -13,7 +13,6 @@ export class AuthService {
 
   private isLoading$$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   public isLoading$: Observable<boolean> = this.isLoading$$.asObservable();
-  public error$: BehaviorSubject<string> = new BehaviorSubject<string>('');
 
   constructor(private http: HttpClient, private sessionStorage: SessionStorageService) {
     if (this.sessionStorage.getToken()) {
@@ -21,36 +20,30 @@ export class AuthService {
     }
   }
 
-  login(user: User) {
-    this.isLoading$$.next(true);
-    this.http
-      .post('/login', user)
-      .pipe(finalize(() => this.isLoading$$.next(false)))
-      .subscribe({
-        next: (res: any) => {
-          this.sessionStorage.setToken(res.result);
-          this.isAuthorized$$.next(true);
-        },
-        error: (err) => this.error$.next(err),
-      });
-  }
-
-  logout() {
-    this.http.delete('/logout');
-    this.sessionStorage.deleteToken();
-    this.isAuthorized$$.next(false);
-  }
-
-  register(user: User) {
+  login(user: User): Observable<LoginResponse> {
     this.isLoading$$.next(true);
     return this.http
-      .post('/register', user)
+      .post<LoginResponse>('/login', user)
       .pipe(finalize(() => this.isLoading$$.next(false)))
       .pipe(
-        catchError((err: any) => {
-          this.error$.next(err);
-          return err;
+        tap((response: LoginResponse) => {
+          this.sessionStorage.setToken(response.result);
+          this.isAuthorized$$.next(true);
         })
       );
+  }
+
+  logout(): Observable<HttpResponse<any>> {
+    return this.http.delete<HttpResponse<any>>('/logout', { observe: 'response' }).pipe(
+      tap(() => {
+        this.sessionStorage.deleteToken();
+        this.isAuthorized$$.next(false);
+      })
+    );
+  }
+
+  register(user: User): Observable<CommonResponse> {
+    this.isLoading$$.next(true);
+    return this.http.post<CommonResponse>('/register', user).pipe(finalize(() => this.isLoading$$.next(false)));
   }
 }

@@ -1,4 +1,5 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import { BehaviorSubject, filter } from 'rxjs';
 import { IconName } from '@fortawesome/free-solid-svg-icons';
 import { AuthorsStoreService } from 'src/app/services';
 import { Course, Author } from 'src/app/models';
@@ -16,7 +17,13 @@ export class CourseCardComponent implements OnInit {
   deleteIcon: IconName = 'trash-can';
   authorsNames: string[] = [];
 
-  constructor(private authorsStoreService: AuthorsStoreService) {}
+  private authors$: BehaviorSubject<Author[]> = new BehaviorSubject<Author[]>([]);
+  private isLoading$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+
+  constructor(private authorsStoreService: AuthorsStoreService) {
+    this.authorsStoreService.authors$.subscribe(this.authors$);
+    this.authorsStoreService.isLoading$.subscribe(this.isLoading$);
+  }
 
   @Input() course: Course;
   @Input() isEditable: boolean | null = false;
@@ -26,8 +33,9 @@ export class CourseCardComponent implements OnInit {
   @Output() show = new EventEmitter<string>();
 
   ngOnInit() {
-    this.authorsStoreService.authors$.subscribe((authors: Author[]) => {
-      this.authorsNames = this.course.authors.map((authorId) => authors.find(({ id }) => id === authorId)!.name);
+    this.isLoading$.pipe(filter((isLoading) => !isLoading)).subscribe(() => {
+      const allAuthors = this.authors$.getValue();
+      this.authorsNames = this.course.authors.map((authorId) => allAuthors.find(({ id }) => id === authorId)!.name);
     });
   }
 

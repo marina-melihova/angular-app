@@ -1,4 +1,6 @@
+import { AuthorResponse } from './author.model';
 export interface User {
+  id: string;
   name: string;
   email: string;
   password: string;
@@ -7,7 +9,14 @@ export interface User {
 
 export interface UserResponse {
   successful: boolean;
-  result: User & {
-    id: string;
+  result: User;
+}
+
+export interface LoginResponse {
+  successful: boolean;
+  result: string;
+  user: {
+    email: string;
+    name: string;
   };
 }

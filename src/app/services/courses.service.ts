@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Course, CoursesResponse, CourseResponse } from '../models';
+import { Course, CoursesResponse, CourseResponse, CommonResponse } from '../models';
 
 @Injectable({
   providedIn: 'root',
@@ -25,7 +25,7 @@ export class CoursesService {
     return this.http.put<CourseResponse>(`/courses/${course.id}`, course);
   }
 
-  deleteCourse(id: string) {
-    return this.http.delete(`/courses/${id}`);
+  deleteCourse(id: string): Observable<CommonResponse> {
+    return this.http.delete<CommonResponse>(`/courses/${id}`);
   }
 }

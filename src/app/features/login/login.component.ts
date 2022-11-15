@@ -1,3 +1,4 @@
+import { LoginResponse } from './../../models/user.model';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -16,12 +17,12 @@ export class LoginComponent implements OnInit, OnDestroy {
   };
 
   isLoading: boolean = false;
+  error: string;
   private destroyStream = new Subject<void>();
 
   constructor(public authService: AuthService, private router: Router) {}
 
   ngOnInit() {
-    this.authService.error$.next('');
     this.initLoadingState();
   }
 
@@ -30,16 +31,19 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   onFormSubmit(form: NgForm) {
+    this.error = '';
+
     if (form.invalid) {
       return;
     }
 
-    this.authService.login(form.value);
-    this.authService.isAuthorized$.subscribe((isAuth) => {
-      if (isAuth) {
-        this.router.navigate(['/courses']);
-      }
-    });
+    this.authService
+      .login(form.value)
+      .pipe(takeUntil(this.destroyStream))
+      .subscribe({
+        next: () => this.router.navigate(['/courses']),
+        error: (err: string) => (this.error = err),
+      });
   }
 
   ngOnDestroy() {
