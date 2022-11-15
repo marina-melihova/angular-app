@@ -52,8 +52,8 @@ export class CoursesListComponent {
   onConfirmDeleteModal(isOk: boolean) {
     if (isOk) {
       this.coursesStoreService.deleteCourse(this.courseDelId).subscribe(() => {
-        const coursesListSize = this.courses$$.getValue();
-        if (!coursesListSize.length) {
+        const coursesList = this.courses$$.getValue();
+        if (!coursesList.length) {
           this.coursesStoreService.getAll();
         }
       });
