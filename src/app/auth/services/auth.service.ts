@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { BehaviorSubject, Observable, finalize, tap } from 'rxjs';
-import { SessionStorageService } from '..';
+import { SessionStorageService, AuthModule } from '..';
 import { User, LoginResponse, CommonResponse } from 'src/app/models';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: AuthModule,
 })
 export class AuthService {
   private isAuthorized$$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);

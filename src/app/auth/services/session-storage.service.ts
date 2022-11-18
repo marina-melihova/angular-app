@@ -1,7 +1,8 @@
 import { Injectable, Inject } from '@angular/core';
+import { AuthModule } from '..';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: AuthModule,
 })
 export class SessionStorageService {
   constructor(@Inject(Window) private window: Window) {}
