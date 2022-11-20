@@ -1,4 +1,8 @@
-@import "forms";
+@import 'forms';
+
+.page-wrap {
+  padding: 70px 158px;
+}
 
 .title {
   margin-bottom: 25px;
@@ -58,7 +62,7 @@ input.form-control {
     background: inherit;
     border: none;
   }
-  &[id="duration"] {
+  &[id='duration'] {
     width: 777px;
   }
 }

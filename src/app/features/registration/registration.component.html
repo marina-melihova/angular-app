@@ -1,47 +1,86 @@
-<div class="form-wrap">
-  <h2 class="title">Registration</h2>
-  <form [formGroup]="regForm" (ngSubmit)="onSubmit()" #form="ngForm" class="form-container">
-    <div class="form-group">
-      <label for="name">Name</label>
-      <input class="form-control" type="text" name="name" id="name" formControlName="name" required placeholder="Input text" />
-      <div *ngIf="name?.invalid && (name?.touched || form.submitted)" class="form-error">
-        <span *ngIf="name?.errors?.['required']; else validator">Name is required</span>
-        <ng-template #validator>
-          <span *ngIf="name?.errors?.['minlength']">Name shouldn't be less than 6 symbols</span>
-        </ng-template>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label for="email">Email</label>
-      <input class="form-control" type="text" name="email" id="email" formControlName="email" required placeholder="Input text" />
-      <div *ngIf="email?.invalid && (email?.touched || form.submitted)" class="form-error">
-        <span *ngIf="email?.errors?.['required']; else validator">Email is required</span>
-        <ng-template #validator>
-          <span *ngIf="email?.errors?.['validateEmail']">Email should be valid</span>
-        </ng-template>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label for="password">Password</label>
-      <div class="password-container">
-        <input class="form-control" type="password" name="password" id="password" formControlName="password" required appToggleType #inputType="inputType"
+<loader [isLoading]="isLoading"></loader>
+<header>
+  <app-header></app-header>
+</header>
+<main class="container main-wrap">
+  <div class="form-wrap">
+    <h2 class="title">Registration</h2>
+    <form [formGroup]="regForm"
+          (ngSubmit)="onSubmit()"
+          #form="ngForm"
+          class="form-container">
+      <div class="form-error">{{ error }}</div>
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input class="form-control"
+               type="text"
+               name="name"
+               id="name"
+               formControlName="name"
+               required
                placeholder="Input text" />
-        <app-button [btnIcon]="inputType.getIcon()" (click)="inputType.toggle()" [invert]="true" class="password-icon">
-        </app-button>
+        <div *ngIf="name?.invalid && (name?.touched || form.submitted)"
+             class="input-error">
+          <span *ngIf="name?.errors?.['required']; else validator">Name is required</span>
+          <ng-template #validator>
+            <span *ngIf="name?.errors?.['minlength']">Name shouldn't be less than 6 symbols</span>
+          </ng-template>
+        </div>
       </div>
-      <div *ngIf="password?.invalid && (password?.touched || form.submitted)" class="form-error">
-        <span *ngIf="password?.errors?.['required']; else validator">Password is required</span>
-        <ng-template #validator>
-          <span *ngIf="password?.errors?.['minlength']">Password shouldn't be less than 6 symbols</span>
-        </ng-template>
+
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input class="form-control"
+               type="text"
+               name="email"
+               id="email"
+               formControlName="email"
+               required
+               placeholder="Input text" />
+        <div *ngIf="email?.invalid && (email?.touched || form.submitted)"
+             class="input-error">
+          <span *ngIf="email?.errors?.['required']; else validator">Email is required</span>
+          <ng-template #validator>
+            <span *ngIf="email?.errors?.['validateEmail']">Email should be valid</span>
+          </ng-template>
+        </div>
       </div>
-    </div>
 
-    <app-button [btnText]="'Submit'" class="cta-btn" type="submit" [width]="'100%'">
-    </app-button>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <div class="password-wrap">
+          <input class="form-control"
+                 type="password"
+                 name="password"
+                 id="password"
+                 formControlName="password"
+                 required
+                 appToggleType
+                 #inputType="inputType"
+                 placeholder="Input text" />
+          <app-button [btnIcon]="inputType.getIcon()"
+                      (click)="inputType.toggle()"
+                      [invert]="true"
+                      class="password-icon">
+          </app-button>
+        </div>
+        <div *ngIf="password?.invalid && (password?.touched || form.submitted)"
+             class="input-error">
+          <span *ngIf="password?.errors?.['required']; else validator">Password is required</span>
+          <ng-template #validator>
+            <span *ngIf="password?.errors?.['minlength']">Password shouldn't be less than 6 symbols</span>
+          </ng-template>
+        </div>
+      </div>
 
-    <p class="prompt">If you have an account you may <a routerLink="/login" class="link">Login</a></p>
-  </form>
-</div>
+      <app-button [btnText]="'Submit'"
+                  class="cta-btn"
+                  type="submit"
+                  [width]="'100%'">
+      </app-button>
+
+      <p class="prompt">If you have an account you may <a routerLink="/login"
+           class="link">Login</a></p>
+    </form>
+  </div>
+</main>

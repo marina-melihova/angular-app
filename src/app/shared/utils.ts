@@ -12,3 +12,7 @@ export function validateEmail() {
         };
   };
 }
+
+export function areSomeValueTrue(elements: boolean[]): boolean {
+  return elements.some((el) => el);
+}

@@ -4,4 +4,5 @@ export * from './info/info.component';
 export * from './modal/modal.component';
 export * from './user-menu/user-menu.component';
 export * from './not-found/not-found.component';
-export * from '../search-bar/search-bar.component';
+export * from './search-bar/search-bar.component';
+export * from './loader/loader.component';

@@ -1,0 +1,12 @@
+<loader [isLoading]="isLoading"></loader>
+<header>
+  <app-header>
+    <app-user-menu *ngIf="authService.isAuthorized$ | async"
+                   (signOut)="logout()"
+                   [name]="userStoreService.name$ | async">
+    </app-user-menu>
+  </app-header>
+</header>
+<main class="main-wrap">
+  <router-outlet></router-outlet>
+</main>
