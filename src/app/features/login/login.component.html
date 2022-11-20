@@ -1,30 +1,64 @@
-<div class="form-wrap">
-  <h2 class="title">Login</h2>
-  <form #form="ngForm" (ngSubmit)="onFormSubmit(form)" class="form-container">
-    <div class="form-group">
-      <label for="email">Email</label>
-      <input class="form-control" type="text" name="email" id="email" #email="ngModel" [(ngModel)]="user.email" required validateEmail placeholder="Input text" />
-      <div *ngIf="email.invalid && (email.touched || form.submitted)" class="form-error">
-        <span *ngIf="email.errors?.['required']; else validator">Email is required</span>
-        <ng-template #validator>
-          <span *ngIf="email.errors?.['validateEmail']">Email should be valid</span>
-        </ng-template>
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label for="password">Password</label>
-      <div class="password-wrap">
-        <input class="form-control" type="password" name="password" id="password" #password="ngModel" [(ngModel)]="user.password" required appToggleType #inputType="inputType"
+<loader [isLoading]="isLoading"></loader>
+<header>
+  <app-header></app-header>
+</header>
+<main class="container main-wrap">
+  <div class="form-wrap">
+    <h2 class="title">Login</h2>
+    <form #form="ngForm"
+          (ngSubmit)="onFormSubmit(form)"
+          class="form-container">
+      <div class="form-error">{{ error }}</div>
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input class="form-control"
+               type="text"
+               name="email"
+               id="email"
+               #email="ngModel"
+               [(ngModel)]="user.email"
+               required
+               validateEmail
                placeholder="Input text" />
-        <app-button [btnIcon]="inputType.getIcon()" (click)="inputType.toggle()" [invert]="true" class="password-icon"></app-button>
+        <div *ngIf="email.invalid && (email.touched || form.submitted)"
+             class="input-error">
+          <span *ngIf="email.errors?.['required']; else validator">Email is required</span>
+          <ng-template #validator>
+            <span *ngIf="email.errors?.['validateEmail']">Email should be valid</span>
+          </ng-template>
+        </div>
       </div>
-      <span *ngIf="password.invalid && (password.touched || form.submitted)" class="form-error">Password is required</span>
-    </div>
 
-    <app-button [btnText]="'Login'" class="cta-btn" type="submit" [width]="'100%'"></app-button>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <div class="password-wrap">
+          <input class="form-control"
+                 type="password"
+                 name="password"
+                 id="password"
+                 #password="ngModel"
+                 [(ngModel)]="user.password"
+                 required
+                 appToggleType
+                 #inputType="inputType"
+                 placeholder="Input text" />
+          <app-button [btnIcon]="inputType.getIcon()"
+                      (click)="inputType.toggle()"
+                      [invert]="true"
+                      class="password-icon"></app-button>
+        </div>
+        <span *ngIf="password.invalid && (password.touched || form.submitted)"
+              class="input-error">Password is required</span>
+      </div>
 
-    <p class="prompt">If you don't have an account you may <a routerLink="/registration" class="link">Registration</a></p>
+      <app-button [btnText]="'Login'"
+                  class="cta-btn"
+                  type="submit"
+                  [width]="'100%'"></app-button>
 
-  </form>
-</div>
+      <p class="prompt">If you don't have an account you may <a routerLink="/registration"
+           class="link">Registration</a></p>
+
+    </form>
+  </div>
+</main>

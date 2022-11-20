@@ -1,6 +1,42 @@
-<ul class="list-wrap">
-  <li *ngFor="let course of courses" class="card">
-    <app-course-card [course]="course" [isEditable]="isEditable" (delete)="onDeleteCard($event)" (edit)="onEditCard($event)" (show)="onShowCard($event)">
-    </app-course-card>
-  </li>
-</ul>
+<div class="page-wrap container">
+  <ng-template #info>
+    <app-info [title]="infoTitle"
+              [text]="infoText">
+      <app-button [btnText]="addBtnText"
+                  (click)="onAddCourse()"
+                  [width]="btnWidth">
+      </app-button>
+    </app-info>
+  </ng-template>
+  <ng-template #coursesList>
+    <app-button *ngIf="userStoreService.isAdmin$ | async"
+                [btnText]="addBtnText"
+                (click)="onAddCourse()"
+                [width]="btnWidth"
+                class="btn-top">
+    </app-button>
+    <app-search-bar (search)="onSearch($event)"
+                    [placeholder]="'Input text'">
+    </app-search-bar>
+    <ul class="list-wrap">
+      <li *ngFor="let course of courses"
+          class="card">
+        <app-course-card [course]="course"
+                         [isEditable]="userStoreService.isAdmin$ | async"
+                         (delete)="onDelete($event)"
+                         (edit)="onEdit($event)"
+                         (show)="onShow($event)">
+        </app-course-card>
+      </li>
+    </ul>
+  </ng-template>
+  <ng-container *ngTemplateOutlet="courses.length ? coursesList : info"></ng-container>
+  <app-modal *ngIf="showDeleteModal"
+             title="Are you sure?"
+             message="Do you want to delete the course?"
+             okButtonText="OK"
+             cancelButtonText="Cancel"
+             (close)="onToggle()"
+             (confirm)="onConfirmDeleteModal($event)">
+  </app-modal>
+</div>

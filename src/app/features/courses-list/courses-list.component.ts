@@ -1,5 +1,8 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { Course } from 'src/app/models/course.model';
+import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { CoursesStoreService } from 'src/app/services';
+import { UserStoreService } from 'src/app/user';
+import { Course } from 'src/app/models';
 
 @Component({
   selector: 'app-courses-list',
@@ -7,22 +10,56 @@ import { Course } from 'src/app/models/course.model';
   styleUrls: ['./courses-list.component.scss'],
 })
 export class CoursesListComponent {
-  @Input() courses?: Course[];
-  @Input() isEditable: boolean = false;
+  isLoading: boolean = false;
+  showDeleteModal = false;
+  courseDelId: string;
+  infoTitle = 'You can also add new course';
+  infoText = 'Please, use the "Add new course" button';
+  addBtnText = 'Add new course';
+  btnWidth = '235px';
+  courses: Course[] = [];
 
-  @Output() deleteCard = new EventEmitter<Course>();
-  @Output() editCard = new EventEmitter<Course>();
-  @Output() showCard = new EventEmitter<Course>();
-
-  onShowCard(item: Course) {
-    this.showCard.emit(item);
+  constructor(
+    public coursesStoreService: CoursesStoreService,
+    public userStoreService: UserStoreService,
+    private router: Router
+  ) {
+    coursesStoreService.courses$.subscribe((items) => (this.courses = items));
   }
 
-  onDeleteCard(item: Course) {
-    this.deleteCard.emit(item);
+  onAddCourse() {
+    this.router.navigate(['courses/add']);
   }
 
-  onEditCard(item: Course) {
-    this.editCard.emit(item);
+  onEdit(courseId: string) {
+    this.router.navigate(['/courses/edit', courseId]);
+  }
+
+  onShow(courseId: string) {
+    this.router.navigate(['/courses', courseId]);
+  }
+
+  onSearch(query: string) {
+    this.coursesStoreService.searchCourse(query);
+  }
+
+  onDelete(courseId: string) {
+    this.courseDelId = courseId;
+    this.showDeleteModal = true;
+  }
+
+  onConfirmDeleteModal(isOk: boolean) {
+    if (isOk) {
+      this.coursesStoreService.deleteCourse(this.courseDelId).subscribe(() => {
+        if (!this.courses.length) {
+          this.coursesStoreService.getAll();
+        }
+      });
+    }
+    this.showDeleteModal = false;
+  }
+
+  onToggle() {
+    this.showDeleteModal = !this.showDeleteModal;
   }
 }

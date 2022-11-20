@@ -1,11 +1,11 @@
-@import "variables";
+@import 'variables';
 
 .form-control {
   display: block;
   width: 100%;
   padding: 12px 16px;
   color: $text-color;
-  font-family: "Open Sans";
+  font-family: 'Open Sans';
   font-size: 16px;
   line-height: 1.5;
   background-color: #fff;
@@ -16,7 +16,7 @@
   transition: border-color 0.15s ease-in-out;
   &::placeholder {
     color: $light-grey;
-    font-family: "Open Sans";
+    font-family: 'Open Sans';
     font-size: 16px;
   }
   &.ng-invalid {
@@ -27,7 +27,7 @@
   }
 }
 
-.form-error {
+.input-error {
   color: $error-color;
 }
 
