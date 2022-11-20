@@ -1,89 +1,64 @@
-import { Component, DoCheck, OnDestroy } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormControl, FormGroup, Validators, FormArray } from '@angular/forms';
-import { Subject, takeUntil, BehaviorSubject } from 'rxjs';
+import { Subject, BehaviorSubject, skipWhile } from 'rxjs';
 import { IconName } from '@fortawesome/free-solid-svg-icons';
-import { CoursesStoreService, AuthorsStoreService } from 'src/app/services';
-import { Course, Author, CourseResponse, AuthorResponse } from '../../models';
+import { CoursesStateFacade, AuthorsStateFacade } from 'src/app/store';
+import { Course, Author } from '../../models';
 
 @Component({
   selector: 'app-course-form',
   templateUrl: './course-form.component.html',
   styleUrls: ['./course-form.component.scss'],
 })
-export class CourseFormComponent implements DoCheck, OnDestroy {
-  pageTitle: string;
-  submitText: string;
+export class CourseFormComponent {
+  pageTitle: string = 'Course create page';
+  submitText: string = 'Create course';
   courseForm: FormGroup;
   closeBtnIcon: IconName = 'xmark';
   isEditMode: boolean;
   course: Course | null = null;
   courseId: string = '';
   isSubmitted: boolean = false;
-  formClasses: Record<string, boolean> = { 'form-container': true };
   btnWidth = '185px';
-  isLoading: boolean = false;
-  private destroyStream = new Subject<void>();
-  private authors$: BehaviorSubject<Author[]> = new BehaviorSubject<Author[]>([]);
-  currentAuthors: Author[] = [];
+
+  private addedAuthors$: BehaviorSubject<Author[]> = new BehaviorSubject<Author[]>([]);
 
   constructor(
     private fb: FormBuilder,
     private router: Router,
     private route: ActivatedRoute,
-    private authorsStoreService: AuthorsStoreService,
-    private coursesStoreService: CoursesStoreService
+    private authorsStateFacade: AuthorsStateFacade,
+    private coursesStateFacade: CoursesStateFacade
   ) {
+    this.authorsStateFacade.resetAddedAuthors();
+    this.authorsStateFacade.addedAuthors$.subscribe(this.addedAuthors$);
     this.isEditMode = this.route.snapshot.url[0].path === 'edit' ? true : false;
-    this.pageTitle = this.isEditMode ? 'Course edit page' : 'Course create page';
-    this.submitText = this.isEditMode ? 'Save course' : 'Create course';
-    this.authorsStoreService.authors$.subscribe(this.authors$);
+    if (this.isEditMode) {
+      this.pageTitle = 'Course edit page';
+      this.submitText = 'Save course';
+      this.courseId = this.route.snapshot.paramMap.get('id') || '';
+      this.coursesStateFacade.getSingleCourse(this.courseId);
+      this.coursesStateFacade.course$.subscribe((item) => (this.course = item));
+    }
   }
 
   ngOnInit() {
-    if (this.isEditMode) {
-      this.courseId = this.route.snapshot.paramMap.get('id') || '';
-      this.initCourseData();
-    } else {
-      this.buildForm();
-    }
-  }
-
-  ngDoCheck() {
-    this.formClasses['reset'] = !this.isSubmitted;
+    this.coursesStateFacade.course$
+      .pipe(skipWhile((course) => this.isEditMode && !course))
+      .subscribe(() => this.buildForm());
   }
 
   buildForm() {
-    let authorsNames: string[] = [];
-    if (this.course) {
-      const allAuthors = this.authors$.getValue();
-      this.currentAuthors = this.course.authors.map((authorId: string) =>
-        allAuthors.find(({ id }) => id === authorId)
-      ) as Author[];
-      authorsNames = this.currentAuthors.map(({ name }) => name);
-    }
     this.courseForm = this.fb.group({
       title: [this.course?.title || '', Validators.required],
       description: [this.course?.description || '', Validators.required],
-      authors: this.fb.array(authorsNames),
+      authors: this.fb.array(this.course?.authors || []),
       duration: [this.course?.duration || '', [Validators.required, Validators.min(0)]],
       newAuthor: this.fb.group({
         authorName: ['', Validators.pattern(/^[a-z0-9\s]+$/i)],
       }),
     });
-  }
-
-  initCourseData() {
-    this.coursesStoreService
-      .getCourse(this.courseId)
-      .pipe(takeUntil(this.destroyStream))
-      .subscribe({
-        next: (response: CourseResponse) => {
-          this.course = response.result;
-          this.buildForm();
-        },
-        error: () => this.router.navigateByUrl('404', { skipLocationChange: true }),
-      });
   }
 
   get title() {
@@ -113,29 +88,20 @@ export class CourseFormComponent implements DoCheck, OnDestroy {
     }
     const courseBody = { ...this.courseForm.value };
     delete courseBody.newAuthor;
-    courseBody.authors = courseBody.authors.map(
-      (authorName: string) => this.currentAuthors.find(({ name }) => name === authorName)!.id
-    );
+    courseBody.authors = courseBody.authors.map((authorName: string) => {
+      const currentAuthors = this.addedAuthors$.getValue();
+      return currentAuthors.find(({ name }) => name === authorName)!.id;
+    });
     if (this.isEditMode) {
-      courseBody.id = this.courseId;
-      this.coursesStoreService.editCourse(courseBody);
-      this.goBack();
+      this.coursesStateFacade.editCourse(this.courseId, courseBody);
     } else {
-      this.coursesStoreService.createCourse(courseBody);
-      this.authors.clear();
-      this.courseForm.reset();
-      this.isSubmitted = false;
+      this.coursesStateFacade.createCourse(courseBody);
     }
   }
 
   onAddAuthor(value: string) {
     if (this.authorName?.valid && this.authorName?.value) {
-      this.authorsStoreService
-        .addAuthor(value)
-        .pipe(takeUntil(this.destroyStream))
-        .subscribe((response: AuthorResponse) => {
-          this.currentAuthors.push(response.result);
-        });
+      this.authorsStateFacade.addAuthor(value);
       const control = new FormControl(value);
       this.authors.push(control);
       this.authorName.reset();
@@ -148,9 +114,5 @@ export class CourseFormComponent implements DoCheck, OnDestroy {
 
   goBack() {
     this.router.navigate(['courses']);
-  }
-
-  ngOnDestroy() {
-    this.destroyStream.next();
   }
 }

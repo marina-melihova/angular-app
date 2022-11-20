@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Course, CoursesResponse, CourseResponse, CommonResponse } from '../models';
+import { CourseBody, CoursesResponse, CourseResponse, CommonResponse } from '../models';
 
 @Injectable({
   providedIn: 'root',
@@ -17,12 +17,12 @@ export class CoursesService {
     return this.http.get<CourseResponse>(`/courses/${id}`);
   }
 
-  createCourse(course: Course): Observable<CourseResponse> {
+  createCourse(course: CourseBody): Observable<CourseResponse> {
     return this.http.post<CourseResponse>('/courses/add', course);
   }
 
-  editCourse(course: Course): Observable<CourseResponse> {
-    return this.http.put<CourseResponse>(`/courses/${course.id}`, course);
+  editCourse(id: string, course: CourseBody): Observable<CourseResponse> {
+    return this.http.put<CourseResponse>(`/courses/${id}`, course);
   }
 
   deleteCourse(id: string): Observable<CommonResponse> {

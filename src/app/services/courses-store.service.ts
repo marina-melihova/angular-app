@@ -40,10 +40,10 @@ export class CoursesStoreService {
       });
   }
 
-  editCourse(course: Course) {
+  editCourse(id: string, course: Course) {
     this.isLoading$$.next(true);
     this.coursesService
-      .editCourse(course)
+      .editCourse(id, course)
       .pipe(finalize(() => this.isLoading$$.next(false)))
       .subscribe((response: CourseResponse) => {
         const editedCourse = response.result;

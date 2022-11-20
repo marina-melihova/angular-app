@@ -1,10 +1,13 @@
-export interface Course {
-  id: string;
+export interface CourseBody {
   title: string;
   description: string;
-  creationDate: string;
   duration: number;
   authors: string[];
+}
+
+export interface Course extends CourseBody {
+  id: string;
+  creationDate: string;
 }
 
 export interface CourseResponse {

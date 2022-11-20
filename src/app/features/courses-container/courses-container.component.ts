@@ -1,10 +1,9 @@
 import { Component, OnDestroy, ChangeDetectorRef } from '@angular/core';
-import { Router } from '@angular/router';
-import { HttpResponse } from '@angular/common/http';
 import { Subject, BehaviorSubject, takeUntil, combineLatest } from 'rxjs';
-import { AuthService } from 'src/app/auth';
-import { UserStoreService } from 'src/app/user';
-import { CoursesStoreService, AuthorsStoreService } from 'src/app/services';
+import { AuthStateFacade } from 'src/app/auth';
+import { UserStateFacade } from 'src/app/user';
+import { AuthorsStateFacade, CoursesStateFacade } from 'src/app/store';
+import { CoursesStoreService } from 'src/app/services';
 import { areSomeValueTrue } from 'src/app/shared/utils';
 
 @Component({
@@ -18,19 +17,19 @@ export class CoursesContainerComponent implements OnDestroy {
   private destroyStream = new Subject<void>();
 
   constructor(
-    public authService: AuthService,
-    public userStoreService: UserStoreService,
-    private router: Router,
+    public authStateFacade: AuthStateFacade,
+    public userStateFacade: UserStateFacade,
     private coursesStoreService: CoursesStoreService,
-    private authorsStoreService: AuthorsStoreService,
+    public coursesStateFacade: CoursesStateFacade,
+    private authorsStateFacade: AuthorsStateFacade,
     private cdRef: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
     this.initLoadingState();
-    this.userStoreService.getUser();
-    this.authorsStoreService.getAll();
-    this.coursesStoreService.getAll();
+    this.userStateFacade.getCurrentUser();
+    this.authorsStateFacade.getAuthors();
+    this.coursesStateFacade.getAllCourses();
   }
 
   ngAfterViewChecked() {
@@ -42,21 +41,15 @@ export class CoursesContainerComponent implements OnDestroy {
   }
 
   logout() {
-    this.authService
-      .logout()
-      .pipe(takeUntil(this.destroyStream))
-      .subscribe((response: HttpResponse<any>) => {
-        if (response.status === 200) {
-          this.router.navigate(['/login']);
-        }
-      });
+    this.authStateFacade.logout();
   }
 
   initLoadingState() {
     combineLatest([
-      this.userStoreService.isLoading$,
-      this.authorsStoreService.isLoading$,
-      this.coursesStoreService.isLoading$,
+      this.userStateFacade.isLoading$,
+      this.authorsStateFacade.isLoading$,
+      this.coursesStateFacade.isAllCoursesLoading$,
+      this.coursesStateFacade.isSingleCourseLoading$,
     ])
       .pipe(takeUntil(this.destroyStream))
       .subscribe((loaders) => {

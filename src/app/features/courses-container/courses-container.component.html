@@ -1,9 +1,9 @@
 <loader [isLoading]="isLoading"></loader>
 <header>
   <app-header>
-    <app-user-menu *ngIf="authService.isAuthorized$ | async"
+    <app-user-menu *ngIf="authStateFacade.isAuthorized$ | async"
                    (signOut)="logout()"
-                   [name]="userStoreService.name$ | async">
+                   [name]="userStateFacade.name$ | async">
     </app-user-menu>
   </app-header>
 </header>

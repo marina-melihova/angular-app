@@ -1,7 +1,8 @@
+import { BehaviorSubject } from 'rxjs';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { CoursesStoreService } from 'src/app/services';
-import { UserStoreService } from 'src/app/user';
+import { UserStateFacade } from 'src/app/user';
+import { CoursesStateFacade } from 'src/app/store';
 import { Course } from 'src/app/models';
 
 @Component({
@@ -10,7 +11,6 @@ import { Course } from 'src/app/models';
   styleUrls: ['./courses-list.component.scss'],
 })
 export class CoursesListComponent {
-  isLoading: boolean = false;
   showDeleteModal = false;
   courseDelId: string;
   infoTitle = 'You can also add new course';
@@ -19,12 +19,24 @@ export class CoursesListComponent {
   btnWidth = '235px';
   courses: Course[] = [];
 
+  private isSearchingState$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+
   constructor(
-    public coursesStoreService: CoursesStoreService,
-    public userStoreService: UserStoreService,
+    public coursesStateFacade: CoursesStateFacade,
+    public userStateFacade: UserStateFacade,
     private router: Router
   ) {
-    coursesStoreService.courses$.subscribe((items) => (this.courses = items));
+    this.coursesStateFacade.isSearchingState$.subscribe(this.isSearchingState$);
+    this.coursesStateFacade.courses$.subscribe((items) => {
+      if (this.isSearchingState$.getValue()) {
+        this.courses = items;
+      }
+    });
+    this.coursesStateFacade.allCourses$.subscribe((items) => {
+      if (!this.isSearchingState$.getValue()) {
+        this.courses = items;
+      }
+    });
   }
 
   onAddCourse() {
@@ -40,7 +52,7 @@ export class CoursesListComponent {
   }
 
   onSearch(query: string) {
-    this.coursesStoreService.searchCourse(query);
+    this.coursesStateFacade.getFilteredCourses(query);
   }
 
   onDelete(courseId: string) {
@@ -50,11 +62,7 @@ export class CoursesListComponent {
 
   onConfirmDeleteModal(isOk: boolean) {
     if (isOk) {
-      this.coursesStoreService.deleteCourse(this.courseDelId).subscribe(() => {
-        if (!this.courses.length) {
-          this.coursesStoreService.getAll();
-        }
-      });
+      this.coursesStateFacade.deleteCourse(this.courseDelId);
     }
     this.showDeleteModal = false;
   }

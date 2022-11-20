@@ -1,8 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subject, takeUntil, BehaviorSubject, filter } from 'rxjs';
-import { CoursesStoreService, AuthorsStoreService } from 'src/app/services';
-import { Course, Author, CourseResponse } from 'src/app/models';
+import { Subject } from 'rxjs';
+import { CoursesStateFacade } from 'src/app/store';
+import { Course } from 'src/app/models';
 
 @Component({
   selector: 'app-course',
@@ -15,39 +15,14 @@ export class CourseDetailsComponent implements OnInit, OnDestroy {
   authorsNames: string[] = [];
 
   private destroyStream = new Subject<void>();
-  private authors$: BehaviorSubject<Author[]> = new BehaviorSubject<Author[]>([]);
-  private isLoading$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
-  constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private authorsStoreService: AuthorsStoreService,
-    private coursesStoreService: CoursesStoreService
-  ) {
-    this.authorsStoreService.authors$.subscribe(this.authors$);
-    this.authorsStoreService.isLoading$.subscribe(this.isLoading$);
+  constructor(private route: ActivatedRoute, private router: Router, private coursesStateFacade: CoursesStateFacade) {
+    this.coursesStateFacade.course$.subscribe((course) => (this.course = course));
   }
 
   ngOnInit() {
     this.courseId = this.route.snapshot.paramMap.get('id') || '';
-    this.initCourseData();
-  }
-
-  initCourseData() {
-    this.coursesStoreService
-      .getCourse(this.courseId)
-      .pipe(takeUntil(this.destroyStream))
-      .subscribe({
-        next: (response: CourseResponse) => {
-          this.course = response.result;
-          const courseAuthorsIds = this.course.authors;
-          this.isLoading$.pipe(filter((isLoading) => !isLoading)).subscribe(() => {
-            const allAuthors = this.authors$.getValue();
-            this.authorsNames = courseAuthorsIds.map((authorId) => allAuthors.find(({ id }) => id === authorId)!.name);
-          });
-        },
-        error: () => this.router.navigateByUrl('404', { skipLocationChange: true }),
-      });
+    this.coursesStateFacade.getSingleCourse(this.courseId);
   }
 
   goBack() {

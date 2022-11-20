@@ -9,7 +9,7 @@
     </app-info>
   </ng-template>
   <ng-template #coursesList>
-    <app-button *ngIf="userStoreService.isAdmin$ | async"
+    <app-button *ngIf="userStateFacade.isAdmin$ | async"
                 [btnText]="addBtnText"
                 (click)="onAddCourse()"
                 [width]="btnWidth"
@@ -22,7 +22,7 @@
       <li *ngFor="let course of courses"
           class="card">
         <app-course-card [course]="course"
-                         [isEditable]="userStoreService.isAdmin$ | async"
+                         [isEditable]="userStateFacade.isAdmin$ | async"
                          (delete)="onDelete($event)"
                          (edit)="onEdit($event)"
                          (show)="onShow($event)">

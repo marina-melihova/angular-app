@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { AuthStateFacade } from 'src/app/auth';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +8,7 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'courses-angular-app';
+  constructor(private authStateFacade: AuthStateFacade) {
+    this.authStateFacade.setAuthorization();
+  }
 }
