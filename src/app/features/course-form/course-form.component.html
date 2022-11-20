@@ -3,7 +3,7 @@
   <form *ngIf="!isEditMode || (isEditMode && course)"
         [formGroup]="courseForm"
         (ngSubmit)="onSubmit()"
-        [ngClass]="formClasses">
+        class="form-container">
     <div class="form-body">
       <h3 class="form-group-title">Main Info</h3>
       <div class="form-group">

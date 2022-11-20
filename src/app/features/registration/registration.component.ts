@@ -1,8 +1,6 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { Subject, takeUntil } from 'rxjs';
-import { AuthService } from 'src/app/auth';
+import { AuthStateFacade } from 'src/app/auth';
 import { validateEmail } from '../../shared/utils';
 
 @Component({
@@ -10,17 +8,13 @@ import { validateEmail } from '../../shared/utils';
   templateUrl: './registration.component.html',
   styleUrls: ['./registration.component.scss'],
 })
-export class RegistrationComponent implements OnInit, OnDestroy {
+export class RegistrationComponent implements OnInit {
   regForm: FormGroup;
-  isLoading: boolean = false;
-  error: string;
-  private destroyStream = new Subject<void>();
 
-  constructor(public authService: AuthService, private router: Router) {}
+  constructor(public authStateFacade: AuthStateFacade) {}
 
   ngOnInit() {
     this.buildForm();
-    this.initLoadingState();
   }
 
   buildForm() {
@@ -29,10 +23,6 @@ export class RegistrationComponent implements OnInit, OnDestroy {
       email: new FormControl(null, [Validators.required, validateEmail()]),
       password: new FormControl(null, [Validators.required, Validators.minLength(6)]),
     });
-  }
-
-  initLoadingState() {
-    this.authService.isLoading$.pipe(takeUntil(this.destroyStream)).subscribe((loader) => (this.isLoading = loader));
   }
 
   get name() {
@@ -48,20 +38,9 @@ export class RegistrationComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-    this.error = '';
     if (this.regForm.invalid) {
       return;
     }
-    this.authService
-      .register(this.regForm.value)
-      .pipe(takeUntil(this.destroyStream))
-      .subscribe({
-        next: () => this.router.navigate(['/login']),
-        error: (err: string) => (this.error = err),
-      });
-  }
-
-  ngOnDestroy() {
-    this.destroyStream.next();
+    this.authStateFacade.register(this.regForm.value);
   }
 }

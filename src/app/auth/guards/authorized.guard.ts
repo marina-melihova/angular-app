@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
 import { Router, CanLoad, Route, UrlSegment, UrlTree } from '@angular/router';
 import { Observable, map } from 'rxjs';
-import { AuthService, AuthModule } from '..';
+import { AuthStateFacade, AuthModule } from '..';
 
 @Injectable({
   providedIn: AuthModule,
 })
 export class AuthorizedGuard implements CanLoad {
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authStateFacade: AuthStateFacade, private router: Router) {}
 
   canLoad(route: Route, segments: UrlSegment[]): Observable<boolean | UrlTree> {
-    return this.authService.isAuthorized$.pipe(
+    return this.authStateFacade.isAuthorized$.pipe(
       map((isAuth) => {
         if (isAuth) {
           return true;

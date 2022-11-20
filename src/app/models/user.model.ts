@@ -1,9 +1,11 @@
-import { AuthorResponse } from './author.model';
-export interface User {
-  id: string;
-  name: string;
+export interface Credentials {
   email: string;
   password: string;
+}
+
+export interface User extends Credentials {
+  id: string;
+  name: string;
   role: 'admin' | 'user';
 }
 

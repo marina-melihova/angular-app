@@ -1,4 +1,4 @@
-<form #form="ngForm"
+<form #searchForm="ngForm"
       (ngSubmit)="onFormSubmit()"
       class="container">
   <label for="search">Search</label>
@@ -9,7 +9,6 @@
          [placeholder]="placeholder"
          [(ngModel)]="query" />
   <app-button type="submit"
-              btnText="Search"
-              [disabled]="!form.valid">
+              btnText="Search">
   </app-button>
 </form>
